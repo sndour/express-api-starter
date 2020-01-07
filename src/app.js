@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/signupmail', (req, res) => {
+app.post('/signupmail', (req, res) => {
   var nom = req.email.split('@')
   const request = mailjet
         .post("send", {'version': 'v3.1'})
