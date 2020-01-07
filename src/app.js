@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
+app.get('/signupmail', (req, res) => {
   var nom = req.email.split('@')
   const request = mailjet
         .post("send", {'version': 'v3.1'})
@@ -67,11 +67,14 @@ app.get('/', (req, res) => {
         })
         .catch((err) => {
             console.log(err.statusCode)
+            res.json({
+              message: err.statusCode
+            });
         });
   
 });
 
-app.get('/signupmail', (req, res) => {
+app.get('/', (req, res) => {
   res.json({
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
   });
