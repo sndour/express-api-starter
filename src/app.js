@@ -92,6 +92,49 @@ app.post('/signupmail', (req, res) => {
   
 });
 
+app.post('/recoveraccount', (req, res)=> {
+  let email = req.email;
+  let url = req.url;
+  const request = mailjet
+                    .post("send", {'version': 'v3.1'})
+                .request({
+                "Messages":[
+                    {
+                        "From": {
+                            "Email": "ymozeus@gmail.com",
+                            "Name": "Rose Belle"
+                        },
+                        "To": [
+                            {
+                                "Email": email,
+                                "Name": "Rose Belle"
+                            },
+                        ],
+                        "Bcc": [
+                            {
+                                "Email": "ndouradefemi@gmail.com",
+                                "Name": "Rose Belle"
+                            }
+                        ],
+                        "Subject": "Confirmation Email",
+                        // "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+                        "HTMLPart": `Bonjour  `+req.body.email +`, Vous avez demande a recuperer votre mot de passe, s\'il vous plaît, cliquez sur ce lien pour changez votre Mot de passe: <br/><a href="${url}"> ${url} </a>`
+                        // "TemplateID": 698906,
+                        // "TemplateLanguage": true,
+                        // "Subject": "Confirmation Email",
+                        // "Variables": {   "link": url}
+                    }
+                ]
+            });
+                    request
+                    .then((result) => {
+                        console.log(result.body)
+                    })
+                    .catch((err) => {
+                        console.log(err.statusCode)
+                    });
+});
+
 app.get('/', (req, res) => {
   res.json({
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
