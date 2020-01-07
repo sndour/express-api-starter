@@ -26,13 +26,13 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json());
 
-// app.use((req, res) =>{
-//   if (req.method == "OPTIONS")
-//     {
-//         res.writeHead(200, {"Content-Type": "application/json"});
-//         res.end();
-//     }
-// });
+app.use((req, res) =>{
+  if (req.method == "OPTIONS")
+    {
+        res.writeHead(200, {"Content-Type": "application/json"});
+        res.end();
+    }
+});
 
 app.post('/signupmail', (req, res) => {
   console.log('on regarde le contenu du body qui est: ',req.body);
