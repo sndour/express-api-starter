@@ -24,9 +24,19 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+app.use(bodyParser.json());
+
+// app.use((req, res) =>{
+//   if (req.method == "OPTIONS")
+//     {
+//         res.writeHead(200, {"Content-Type": "application/json"});
+//         res.end();
+//     }
+// });
 
 app.post('/signupmail', (req, res) => {
-  var nom = req.email.split('@')
+  console.log('on regarde le contenu du body qui est: ',req.body);
+  var nom = req.body.email.split('@');
   const request = mailjet
         .post("send", {'version': 'v3.1'})
         .request({
@@ -38,7 +48,7 @@ app.post('/signupmail', (req, res) => {
                     },
                     "To": [
                         {
-                            "Email": req.email,
+                            "Email": req.body.email,
                             "Name": nom[0]
                         },
                     ],
@@ -50,7 +60,7 @@ app.post('/signupmail', (req, res) => {
                     ],
                     "Subject": "Confirmation Email",
                     // "TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-                     "HTMLPart": `Bonjour `+bodyz.body.email +` S\'il vous plaît, cliquez sur ce lien pour confirmer votre adresse email: <br/><a href="${req.urlConfirm}"> ${req.urlConfirm} </a>`
+                     "HTMLPart": `Bonjour `+req.body.email +` S\'il vous plaît, cliquez sur ce lien pour confirmer votre adresse email: <br/><a href="${req.body.urlConfirm}"> ${req.body.urlConfirm} </a>`
                     // "TemplateID": 698906,
                     // "TemplateLanguage": true,
                     // "Subject": "Confirmation Email",
@@ -68,7 +78,7 @@ app.post('/signupmail', (req, res) => {
         .catch((err) => {
             console.log(err.statusCode)
             res.json({
-              message: err.statusCode
+              message: err
             });
         });
   
@@ -82,12 +92,11 @@ app.get('/', (req, res) => {
 
 // app.use('/api/v1', api);
 
-
-
-app.use(bodyParser.json());
-// app.use(express.static(path.join(__dirname, '/public')));
-
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
+
+
+// app.use(express.static(path.join(__dirname, '/public')));
+
 
 module.exports = app;
