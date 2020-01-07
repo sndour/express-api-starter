@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const bodyParser = require ('body-parser');
@@ -26,13 +27,20 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json());
 
-app.use((req, res) =>{
-  if (req.method == "OPTIONS")
-    {
-        res.writeHead(200, {"Content-Type": "application/json"});
-        res.end();
-    }
-});
+
+// app.use((req, res) =>{
+//   if (req.method == "OPTIONS")
+//     {
+//         res.writeHead(200, {"Content-Type": "application/json"});
+//         res.end();
+//     }
+// });
+
+const corsOptions = {
+  origin: true,
+  credentials: true
+}
+app.options('*', cors(corsOptions));
 
 app.post('/signupmail', (req, res) => {
   console.log('on regarde le contenu du body qui est: ',req.body);
